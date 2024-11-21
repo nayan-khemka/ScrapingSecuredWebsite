@@ -33,18 +33,25 @@ jobs:
       id: run_container
       run: docker run -d -p 8000:8000 --name flask_app_container flask-app
 
-    - name: Verify Docker container is running
-      run: |
-        docker ps -a
-        docker logs flask_app_container
-
     - name: Wait for Flask to be ready
       run: sleep 20
 
+    - name: Check and log container status
+      run: |
+        CONTAINER_STATUS=$(docker ps -a -f name=flask_app_container --format "{{.Status}}")
+        echo "Container Status: $CONTAINER_STATUS"
+        if [[ "$CONTAINER_STATUS" != "Up "* ]]; then
+          echo "Container logs:"
+          docker logs flask_app_container
+          exit 1
+        fi
+
     - name: Run Selenium script
+      if: success()
       run: docker exec flask_app_container python scrape.py
 
     - name: Commit and push changes
+      if: success()
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
