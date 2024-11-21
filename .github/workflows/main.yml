@@ -58,6 +58,7 @@ jobs:
     #       echo "No changes detected in scraped_data.xlsx"
     #       exit 1
 
+      
     - name: Commit and push changes
       # if: success()
       env:
@@ -65,6 +66,8 @@ jobs:
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
-        git add scraped_data.xlsx
-        git commit -m 'Update data'
-        git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/nayan-khemka/ScrapingSecuredWebsite.git
+        if git status --porcelain | grep -q snam_table.xlsx; then
+            git add scraped_data.xlsx
+            git commit -m 'Update tables'
+            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/nayan-khemka/ScrapingSecuredWebsite.git
+        fi
