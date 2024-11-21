@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import os
+from io import StringIO
 
 def scrape_data():
     options = Options()
@@ -14,9 +15,19 @@ def scrape_data():
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get("http://localhost:8000/")
 
+    print("Attempting login...")
     driver.find_element(By.NAME, 'username').send_keys('user')
     driver.find_element(By.NAME, 'password').send_keys('password')
     driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
+
+    # Verify login by checking for the presence of an element
+    try:
+        driver.find_element(By.ID, 'new_york')
+        print("Login successful")
+    except:
+        print("Login failed")
+        driver.quit()
+        return
 
     # Extract city times from the webpage
     new_york_time = driver.find_element(By.ID, 'new_york').text.split(": ")[1]
@@ -39,8 +50,8 @@ def scrape_data():
         with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='overlay') as writer:
             city_time_df.to_excel(writer, sheet_name='Sheet1', index=False)
 
+    print("Data saved to Excel")
     driver.quit()
 
 if __name__ == "__main__":
     scrape_data()
-    
