@@ -5,18 +5,17 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import os
-from io import StringIO
 
 def scrape_data():
     print("Starting scrape_data function")
-    
+
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get("http://localhost:8000/")
-    
+
     print("Opened localhost:8000")
 
     print("Attempting login...")
@@ -54,13 +53,12 @@ def scrape_data():
     # Convert city time data into a DataFrame
     city_time_df = pd.DataFrame(list(cities.items()), columns=["City", "Current Time"])
 
-    file_path = 'scraped_data.xlsx'
+    file_path = 'scraped_data.xlsx'  # Ensure the file is in the root directory
     if not os.path.exists(file_path):
         print("File does not exist. Creating new file.")
         city_time_df.to_excel(file_path, index=False)
     else:
         print("Appending to existing file.")
-        print(city_time_df)
         with pd.ExcelWriter(file_path, mode='a', engine='openpyxl') as writer:
             timestamp = pd.Timestamp.now().strftime("%Y%m%d%H%M%S")
             city_time_df.to_excel(writer, sheet_name=f'Time_{timestamp}', index=False)
