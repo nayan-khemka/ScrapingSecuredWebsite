@@ -8,31 +8,40 @@ import os
 from io import StringIO
 
 def scrape_data():
+    print("Starting scrape_data function")
+    
     options = Options()
     options.add_argument('--headless')
     options.add_argument('--no-sandbox')
     options.add_argument('--disable-dev-shm-usage')
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
     driver.get("http://localhost:8000/")
+    
+    print("Opened localhost:8000")
 
     print("Attempting login...")
     driver.find_element(By.NAME, 'username').send_keys('user')
     driver.find_element(By.NAME, 'password').send_keys('password')
     driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 
+    print("Login form submitted")
+
     # Verify login by checking for the presence of an element
     try:
-        driver.find_element(By.ID, 'new_york')
+        new_york_element = driver.find_element(By.ID, 'new_york')
+        london_element = driver.find_element(By.ID, 'london')
+        tokyo_element = driver.find_element(By.ID, 'tokyo')
         print("Login successful")
-    except:
-        print("Login failed")
+    except Exception as e:
+        print(f"Login failed: {e}")
         driver.quit()
         return
 
     # Extract city times from the webpage
-    new_york_time = driver.find_element(By.ID, 'new_york').text.split(": ")[1]
-    london_time = driver.find_element(By.ID, 'london').text.split(": ")[1]
-    tokyo_time = driver.find_element(By.ID, 'tokyo').text.split(": ")[1]
+    print("Extracting city times")
+    new_york_time = new_york_element.text.split(": ")[1]
+    london_time = london_element.text.split(": ")[1]
+    tokyo_time = tokyo_element.text.split(": ")[1]
 
     cities = {
         "New York": new_york_time,
@@ -40,18 +49,24 @@ def scrape_data():
         "Tokyo": tokyo_time
     }
 
+    print("City times extracted:", cities)
+
     # Convert city time data into a DataFrame
     city_time_df = pd.DataFrame(list(cities.items()), columns=["City", "Current Time"])
 
     file_path = 'scraped_data.xlsx'
     if not os.path.exists(file_path):
+        print("File does not exist. Creating new file.")
         city_time_df.to_excel(file_path, index=False)
     else:
-        with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='overlay') as writer:
-            city_time_df.to_excel(writer, sheet_name='Sheet1', index=False)
+        print("Appending to existing file.")
+        with pd.ExcelWriter(file_path, mode='a', engine='openpyxl') as writer:
+            timestamp = pd.Timestamp.now().strftime("%Y%m%d%H%M%S")
+            city_time_df.to_excel(writer, sheet_name=f'Time_{timestamp}', index=False)
 
     print("Data saved to Excel")
     driver.quit()
 
 if __name__ == "__main__":
+    print("Starting script")
     scrape_data()

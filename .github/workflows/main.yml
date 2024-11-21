@@ -26,10 +26,17 @@ jobs:
       run: |
         pip install flask pandas pytz selenium webdriver-manager lxml openpyxl
 
-    - name: Build and run Docker container
-      run: |
-        docker build -t flask-app .
-        docker run -d flask-app
+    - name: Build Docker container
+      run: docker build -t flask-app .
+
+    - name: Run Docker container
+      run: docker run -d -p 8000:8000 flask-app
+
+    - name: Wait for Flask to be ready
+      run: sleep 20
+
+    - name: Run Selenium script
+      run: docker exec flask-app python scrape.py
 
     - name: Commit and push changes
       env:

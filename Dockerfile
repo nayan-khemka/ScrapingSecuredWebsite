@@ -30,5 +30,5 @@ RUN CHROMEDRIVER_VERSION=$(curl -sS chromedriver.storage.googleapis.com/LATEST_R
 ENV CHROME_BIN=/usr/bin/google-chrome
 ENV CHROMEDRIVER=/usr/local/bin/chromedriver
 
-# Start Flask application and run Selenium script
-CMD ["sh", "-c", "flask run --host=0.0.0.0 --port=8000 & sleep 10 && python scrape.py"]
+# Start Flask application
+CMD ["flask", "run", "--host=0.0.0.0", "--port=8000"]
