@@ -47,18 +47,23 @@ jobs:
         fi
 
     - name: Run Selenium script
-      if: success()
       run: docker exec flask_app_container python scrape.py
 
+    - name: Verify file changes
+      run: |
+        echo "Checking for changes in scraped_data.xlsx..."
+        if git status --porcelain | grep -q scraped_data.xlsx; then
+          echo "Changes detected in scraped_data.xlsx"
+        else
+          echo "No changes detected in scraped_data.xlsx"
+          exit 1
+
     - name: Commit and push changes
-      if: success()
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
-        if git status --porcelain | grep -q scraped_data.xlsx; then
-            git add scraped_data.xlsx
-            git commit -m 'Update data'
-            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/nayan-khemka/ScrapingSecuredWebsite.git
-        fi
+        git add scraped_data.xlsx
+        git commit -m 'Update data'
+        git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/nayan-khemka/ScrapingSecuredWebsite.git
