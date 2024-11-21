@@ -53,6 +53,7 @@ def scrape_data():
 
     # Convert city time data into a DataFrame
     city_time_df = pd.DataFrame(list(cities.items()), columns=["City", "Current Time"])
+    print(city_time_df)
 
 #     file_path = 'scraped_data.xlsx'  # Ensure the file is in the root directory
 #     if not os.path.exists(file_path):
@@ -68,7 +69,7 @@ def scrape_data():
     file_path = os.path.join(os.getcwd(), "scraped_data.xlsx")
 
     if not os.path.exists(file_path):
-        df.to_excel(file_path, index=False)
+        city_time_df.to_excel(file_path, index=False)
     else:
         with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='overlay') as writer:
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
