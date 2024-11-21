@@ -1,0 +1,47 @@
+name: Scrape and Update Data
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '*/10 * * * *'
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dependencies
+      run: |
+        pip install flask pandas pytz selenium webdriver-manager
+
+    - name: Build and run Docker container
+      run: |
+        docker build -t flask-app .
+        docker run -d -p 8000:8000 flask-app
+        sleep 10  # Wait for the server to start
+
+    - name: Run Selenium script
+      run: python scrape.py
+
+    - name: Commit and push changes
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        git config --global user.name 'github-actions'
+        git config --global user.email 'github-actions@github.com'
+        if git status --porcelain | grep -q scraped_data.xlsx; then
+            git add scraped_data.xlsx
+            git commit -m 'Update data'
+            git push https://x-access-token:${GH_TOKEN}@github.com/your_username/your_repo.git
