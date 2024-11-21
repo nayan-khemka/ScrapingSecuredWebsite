@@ -59,6 +59,7 @@ jobs:
           exit 1
 
     - name: Commit and push changes
+      if: success()
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: |
