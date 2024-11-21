@@ -45,4 +45,3 @@ jobs:
             git add scraped_data.xlsx
             git commit -m 'Update data'
             git push https://x-access-token:${GH_TOKEN}@github.com/nayan-khemka/ScrapingSecuredWebsite.git
-        fi
