@@ -29,11 +29,7 @@ jobs:
     - name: Build and run Docker container
       run: |
         docker build -t flask-app .
-        docker run -d -p 8000:8000 flask-app
-        sleep 10  # Wait for the server to start
-
-    - name: Run Selenium script
-      run: python scrape.py
+        docker run -d flask-app
 
     - name: Commit and push changes
       env:
