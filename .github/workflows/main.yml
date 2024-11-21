@@ -40,4 +40,5 @@ jobs:
         if git status --porcelain | grep -q scraped_data.xlsx; then
             git add scraped_data.xlsx
             git commit -m 'Update data'
-            git push https://x-access-token:${GH_TOKEN}@github.com/nayan-khemka/ScrapingSecuredWebsite.git
+            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/your_username/your_repo.git
+        fi
