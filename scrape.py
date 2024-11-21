@@ -4,6 +4,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
+import os
 
 def scrape_data():
     options = Options()
@@ -20,8 +21,12 @@ def scrape_data():
     html_content = driver.page_source
     df = pd.read_html(html_content)[0]
 
-    with pd.ExcelWriter('scraped_data.xlsx', mode='a', if_sheet_exists='overlay') as writer:
-        df.to_excel(writer, sheet_name='Sheet1', index=False)
+    file_path = 'scraped_data.xlsx'
+    if not os.path.exists(file_path):
+        df.to_excel(file_path, index=False)
+    else:
+        with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='overlay') as writer:
+            df.to_excel(writer, sheet_name='Sheet1', index=False)
 
     driver.quit()
 
