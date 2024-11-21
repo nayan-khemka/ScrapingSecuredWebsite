@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import os
+from io import StringIO
 
 def scrape_data():
     options = Options()
@@ -19,7 +20,7 @@ def scrape_data():
     driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 
     html_content = driver.page_source
-    df = pd.read_html(html_content)[0]
+    df = pd.read_html(StringIO(html_content))[0]
 
     file_path = 'scraped_data.xlsx'
     if not os.path.exists(file_path):
