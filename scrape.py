@@ -75,7 +75,7 @@ def scrape_data():
             timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
             city_time_df.to_excel(writer, sheet_name=f'Sheet_{timestamp}', index=False)
 
-    print("Data saved to Excel")
+    print("Data saved to Excel", file_path)
     driver.quit()
 
 if __name__ == "__main__":
