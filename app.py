@@ -40,4 +40,4 @@ def data_page():
     return render_template('data.html', tables=[df.to_html(classes='data')], titles=df.columns.values, cities=cities)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port
