@@ -60,6 +60,7 @@ def scrape_data():
         city_time_df.to_excel(file_path, index=False)
     else:
         print("Appending to existing file.")
+        print(city_time_df)
         with pd.ExcelWriter(file_path, mode='a', engine='openpyxl') as writer:
             timestamp = pd.Timestamp.now().strftime("%Y%m%d%H%M%S")
             city_time_df.to_excel(writer, sheet_name=f'Time_{timestamp}', index=False)
