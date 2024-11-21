@@ -31,15 +31,13 @@ jobs:
 
     - name: Run Docker container
       id: run_container
-      run: docker run -d -p 8000:8000 flask-app
+      run: docker run -d -p 8000:8000 --name flask_app_container flask-app
 
     - name: Wait for Flask to be ready
       run: sleep 20
 
     - name: Run Selenium script
-      run: |
-        CONTAINER_ID=$(docker ps -q -f ancestor=flask-app)
-        docker exec $CONTAINER_ID python scrape.py
+      run: docker exec flask_app_container python scrape.py
 
     - name: Commit and push changes
       env:
