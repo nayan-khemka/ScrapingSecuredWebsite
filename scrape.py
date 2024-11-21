@@ -53,15 +53,25 @@ def scrape_data():
     # Convert city time data into a DataFrame
     city_time_df = pd.DataFrame(list(cities.items()), columns=["City", "Current Time"])
 
-    file_path = 'scraped_data.xlsx'  # Ensure the file is in the root directory
+#     file_path = 'scraped_data.xlsx'  # Ensure the file is in the root directory
+#     if not os.path.exists(file_path):
+#         print("File does not exist. Creating new file.")
+#         city_time_df.to_excel(file_path, index=False)
+#     else:
+#         print("Appending to existing file.")
+#         with pd.ExcelWriter(file_path, mode='a', engine='openpyxl') as writer:
+#             timestamp = pd.Timestamp.now().strftime("%Y%m%d%H%M%S")
+#             city_time_df.to_excel(writer, sheet_name=f'Time_{timestamp}', index=False)
+# def save_to_excel(df, file_path):
+#     # Assuming the Excel file is in the same directory as the script
+    file_path = os.path.join(os.getcwd(), "scraped_data.xlsx")
+
     if not os.path.exists(file_path):
-        print("File does not exist. Creating new file.")
-        city_time_df.to_excel(file_path, index=False)
+        df.to_excel(file_path, index=False)
     else:
-        print("Appending to existing file.")
-        with pd.ExcelWriter(file_path, mode='a', engine='openpyxl') as writer:
-            timestamp = pd.Timestamp.now().strftime("%Y%m%d%H%M%S")
-            city_time_df.to_excel(writer, sheet_name=f'Time_{timestamp}', index=False)
+        with pd.ExcelWriter(file_path, mode='a', if_sheet_exists='overlay') as writer:
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+            city_time_df.to_excel(writer, sheet_name=f'Sheet_{timestamp}', index=False)
 
     print("Data saved to Excel")
     driver.quit()
