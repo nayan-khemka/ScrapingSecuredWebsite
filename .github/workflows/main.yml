@@ -24,7 +24,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install flask pandas pytz selenium webdriver-manager lxml
+        pip install flask pandas pytz selenium webdriver-manager lxml openpyxl
 
     - name: Build and run Docker container
       run: |
