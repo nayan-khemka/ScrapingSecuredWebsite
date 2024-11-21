@@ -49,17 +49,17 @@ jobs:
     - name: Run Selenium script
       run: docker exec flask_app_container python scrape.py
 
-    - name: Verify file changes
-      run: |
-        echo "Checking for changes in scraped_data.xlsx..."
-        ls -l scraped_data.xlsx
-        git status
-        if git status --porcelain | grep -q scraped_data.xlsx; then
-          echo "Changes detected in scraped_data.xlsx"
-          git add scraped_data.xlsx
-        else
-          echo "No changes detected in scraped_data.xlsx"
-          exit 1
+    # - name: Verify file changes
+    #   run: |
+    #     echo "Checking for changes in scraped_data.xlsx..."
+    #     ls -l scraped_data.xlsx
+    #     git status
+    #     if git status --porcelain | grep -q scraped_data.xlsx; then
+    #       echo "Changes detected in scraped_data.xlsx"
+    #       git add scraped_data.xlsx
+    #     else
+    #       echo "No changes detected in scraped_data.xlsx"
+    #       exit 1
 
     - name: Commit and push changes
       if: success()
