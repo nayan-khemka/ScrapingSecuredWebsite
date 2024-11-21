@@ -1,0 +1,18 @@
+<html>
+<body>
+    <h2>Data Page</h2>
+    <div>
+        {% for table in tables %}
+            {{ table|safe }}
+        {% endfor %}
+    </div>
+    <div>
+        <h3>Current Time in Different Cities:</h3>
+        <ul>
+            <li>New York: {{ cities["New York"] }}</li>
+            <li>London: {{ cities["London"] }}</li>
+            <li>Tokyo: {{ cities["Tokyo"] }}</li>
+        </ul>
+    </div>
+</body>
+</html>
