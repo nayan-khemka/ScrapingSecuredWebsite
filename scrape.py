@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import os
+from datetime import datetime
 
 def scrape_data():
     print("Starting scrape_data function")
