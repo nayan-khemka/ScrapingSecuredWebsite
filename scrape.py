@@ -20,7 +20,7 @@ def scrape_data():
     print("Opened localhost:8000")
 
     print("Attempting login...")
-    driver.find_element(By.NAME, 'username').send_keys('user')
+    driver.find_element(By.NAME, 'username').send_keys('usern')
     driver.find_element(By.NAME, 'password').send_keys('password')
     driver.find_element(By.CSS_SELECTOR, 'input[type="submit"]').click()
 
