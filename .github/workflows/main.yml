@@ -1,11 +1,11 @@
 name: Scrape and Update Data
 
-on:
-  push:
-    branches:
-      - main
-  schedule:
-    - cron: '*/300 * * * *'
+# on:
+#   push:
+#     branches:
+#       - main
+#   schedule:
+#     - cron: '*/300 * * * *'
 permissions:
   contents: write
 
